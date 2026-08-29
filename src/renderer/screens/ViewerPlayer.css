@@ -1,0 +1,149 @@
+.player {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+.player video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Sem movimento do mouse, tudo some e sobra so a imagem. */
+.player.is-idle {
+  cursor: none;
+}
+
+.player.is-idle .player-top,
+.player.is-idle .player-bottom {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.player-top,
+.player-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  transition: opacity var(--normal) var(--ease);
+  z-index: 2;
+}
+
+.player-top {
+  top: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.78), transparent);
+}
+
+.player-bottom {
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.78), transparent);
+}
+
+.player-top .icon-btn,
+.player-bottom .icon-btn {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.player-top .icon-btn:hover,
+.player-bottom .icon-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.player-top .icon-btn.is-active,
+.player-bottom .icon-btn.is-active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.player-title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.player-host {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-source {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.62);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-volume {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 168px;
+}
+
+.volume-slider {
+  flex: 1;
+}
+
+.player-waiting {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-3);
+  color: var(--text-muted);
+  font-size: 13.5px;
+  background: var(--bg);
+  z-index: 1;
+}
+
+.player-banner {
+  position: absolute;
+  top: 62px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-full);
+  background: var(--warning-soft);
+  color: var(--warning);
+  backdrop-filter: blur(8px);
+  font-size: 12.5px;
+  font-weight: 550;
+  z-index: 3;
+  animation: fade-in var(--normal) var(--ease);
+}
+
+.player-stats {
+  position: absolute;
+  top: 62px;
+  right: var(--sp-4);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(94px, 1fr));
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: rgba(10, 12, 17, 0.86);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-md), inset 0 0 0 1px var(--border-strong);
+  z-index: 3;
+}
+
+.player-stats .stat-pill {
+  background: transparent;
+  padding: 2px var(--sp-1);
+}

@@ -1,0 +1,29 @@
+.boot {
+  align-items: center;
+  justify-content: center;
+}
+
+.titlebar-live {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 26px;
+  padding: 0 var(--sp-2) 0 var(--sp-3);
+  border-radius: var(--r-full);
+  background: var(--live-soft);
+  color: var(--live);
+  font-size: 12px;
+  font-weight: 570;
+  transition: background var(--fast) var(--ease);
+}
+
+.titlebar-live:hover {
+  background: rgba(23, 212, 178, 0.22);
+}
+
+.titlebar-live .live-dot {
+  width: 7px;
+  height: 7px;
+  margin: 0;
+  box-shadow: none;
+}
