@@ -1,6 +1,6 @@
 {
   "name": "lan-screenshare",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Compartilhamento de tela na rede local, sem controle remoto",
   "main": "./out/main/index.js",
   "author": "kayor",
