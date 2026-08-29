@@ -1,5 +1,9 @@
 # LAN ScreenShare
 
+[![Validar o app](https://github.com/kayoinreality/screensharing/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/kayoinreality/screensharing/actions/workflows/ci-cd.yml)
+
+Site de apresentação: [kayoinreality.github.io/screensharing](https://kayoinreality.github.io/screensharing/)
+
 Compartilhamento de tela dentro da rede local, sem servidor na internet e **sem
 controle remoto** — quem entra só assiste.
 
@@ -147,6 +151,19 @@ npm run dist
 ```
 
 O resultado sai em `dist/LAN-ScreenShare-1.0.0.exe`.
+
+### Publicar uma versão
+
+O GitHub gera o executável portátil e cria a release automaticamente sempre que
+uma tag que começa com `v` é enviada. A tag deve acompanhar a versão no
+`package.json`:
+
+```bash
+npm version patch
+git push --follow-tags
+```
+
+Para uma versão menor ou maior, troque `patch` por `minor` ou `major`.
 
 ---
 

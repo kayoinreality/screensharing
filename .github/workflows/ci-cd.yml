@@ -1,61 +1,73 @@
-name: CI/CD Pipeline
+name: Validar e publicar o app
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [master]
+    tags:
+      - 'v*'
   pull_request:
-    branches: [ "main" ]
+    branches: [master]
+
+permissions:
+  contents: read
 
 jobs:
-  build-and-test:
+  validate:
+    name: Validar
     runs-on: ubuntu-latest
 
     steps:
-      - name: Baixar o código do repositório
+      - name: Baixar o código
         uses: actions/checkout@v4
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: 20
+          cache: npm
 
       - name: Instalar dependências
         run: npm ci
 
-      - name: Validar tipos
+      - name: Verificar tipos
         run: npm run typecheck
 
-      - name: Build de produção
+      - name: Verificar build de produção
         run: npm run build
 
   release:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: build-and-test
+    name: Gerar executável e publicar release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: validate
     runs-on: windows-latest
     permissions:
       contents: write
 
     steps:
-      - name: Baixar o código do repositório
+      - name: Baixar a versão marcada
         uses: actions/checkout@v4
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: 20
+          cache: npm
 
       - name: Instalar dependências
         run: npm ci
 
-      - name: Gerar executável
+      - name: Gerar executável portátil
         run: npm run dist
 
-      - name: Criar release automática
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: auto-v${{ github.run_number }}-${{ github.sha }}
-          name: Release automática ${{ github.run_number }}
-          generate_release_notes: true
-          files: dist/LAN-ScreenShare-*.exe
+      - name: Criar release no GitHub
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = node -p "require('./package.json').version"
+          if ("v$version" -ne "${{ github.ref_name }}") {
+            throw "A tag ${{ github.ref_name }} não corresponde à versão v$version do package.json."
+          }
+          $artifact = Get-ChildItem -Path dist -Filter '*.exe' | Select-Object -First 1
+          if (-not $artifact) { throw 'O executável de distribuição não foi encontrado.' }
+          gh release create "${{ github.ref_name }}" $artifact.FullName --title "LAN ScreenShare ${{ github.ref_name }}" --generate-notes
